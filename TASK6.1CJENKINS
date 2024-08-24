@@ -81,21 +81,21 @@ pipeline {
     post {
         always {
             echo 'Pipeline has completed.'
-            archiveArtifacts artifacts: '$BUILD_LOG', allowEmptyArchive: true
+            archiveArtifacts artifacts: "$BUILD_LOG", allowEmptyArchive: true
         }
         success {
             echo 'Pipeline completed successfully!'
             mail to: 'kamalaviloshini@gmail.com',
                  subject: "SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
                  body: "Good news! The build passed.\n\nCheck it out at ${env.BUILD_URL}",
-                 attachments: '$BUILD_LOG'  // Corrected parameter
+                 attachments: "$BUILD_LOG"  // Corrected parameter
         }
         failure {
             echo 'Pipeline failed!'
             mail to: 'kamalaviloshini@gmail.com',
                  subject: "FAILURE: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
                  body: "Something went wrong!\n\nCheck it out at ${env.BUILD_URL}",
-                 attachments: '$BUILD_LOG'  // Corrected parameter
+                 attachments: "$BUILD_LOG"  // Corrected parameter
         }
     }
 }
