@@ -1,54 +1,79 @@
 pipeline {
     agent any
 
+    environment {
+        BUILD_LOG = "build_output.log"  // Define the log file name
+    }
+
     stages {
         stage('Build') {
             steps {
-                echo 'Building the code using Maven...'
-                // Placeholder for build tool, e.g., Maven or Gradle
-                // Example: sh 'mvn clean install'
+                script {
+                    // Redirect output of this stage to a single log file
+                    sh 'echo "Building the code using Maven..." > $BUILD_LOG'
+                    // Example build command, replace with actual build command
+                    sh 'mvn clean install >> $BUILD_LOG 2>&1'
+                }
             }
         }
         stage('Unit and Integration Tests') {
             steps {
-                echo 'Running unit tests using JUnit and integration tests using Selenium...'
-                // Placeholder for test automation tools, e.g., JUnit, Selenium
-                // Example: sh 'mvn test'
+                script {
+                    // Redirect output to the same log file
+                    sh 'echo "Running unit tests using JUnit and integration tests using Selenium..." >> $BUILD_LOG'
+                    // Example test command, replace with actual test command
+                    sh 'mvn test >> $BUILD_LOG 2>&1'
+                }
             }
         }
         stage('Code Analysis') {
             steps {
-                echo 'Analyzing code quality using SonarQube...'
-                // Placeholder for code analysis tool, e.g., SonarQube
-                // Example: sh 'sonar-scanner'
+                script {
+                    // Redirect output to the same log file
+                    sh 'echo "Analyzing code quality using SonarQube..." >> $BUILD_LOG'
+                    // Example code analysis command, replace with actual code analysis command
+                    sh 'sonar-scanner >> $BUILD_LOG 2>&1'
+                }
             }
         }
         stage('Security Scan') {
             steps {
-                echo 'Running security scan using OWASP ZAP...'
-                // Placeholder for security scan tool, e.g., OWASP ZAP
-                // Example: sh 'zap-cli quick-scan http://your-app-url'
+                script {
+                    // Redirect output to the same log file
+                    sh 'echo "Running security scan using OWASP ZAP..." >> $BUILD_LOG'
+                    // Example security scan command, replace with actual security scan command
+                    sh 'zap-cli quick-scan http://your-app-url >> $BUILD_LOG 2>&1'
+                }
             }
         }
         stage('Deploy to Staging') {
             steps {
-                echo 'Deploying application to AWS EC2 staging environment...'
-                // Placeholder for deployment commands
-                // Example: sh 'aws deploy create-deployment ...'
+                script {
+                    // Redirect output to the same log file
+                    sh 'echo "Deploying application to AWS EC2 staging environment..." >> $BUILD_LOG'
+                    // Example deploy command, replace with actual deploy command
+                    sh 'aws deploy create-deployment ... >> $BUILD_LOG 2>&1'
+                }
             }
         }
         stage('Integration Tests on Staging') {
             steps {
-                echo 'Running integration tests on the staging server...'
-                // Placeholder for integration testing on staging
-                // Example: sh 'run-integration-tests'
+                script {
+                    // Redirect output to the same log file
+                    sh 'echo "Running integration tests on the staging server..." >> $BUILD_LOG'
+                    // Example integration tests command, replace with actual integration tests command
+                    sh 'run-integration-tests >> $BUILD_LOG 2>&1'
+                }
             }
         }
         stage('Deploy to Production') {
             steps {
-                echo 'Deploying application to AWS EC2 production environment...'
-                // Placeholder for deployment to production
-                // Example: sh 'aws deploy create-deployment ...'
+                script {
+                    // Redirect output to the same log file
+                    sh 'echo "Deploying application to AWS EC2 production environment..." >> $BUILD_LOG'
+                    // Example deploy to production command, replace with actual deploy to production command
+                    sh 'aws deploy create-deployment ... >> $BUILD_LOG 2>&1'
+                }
             }
         }
     }
@@ -56,20 +81,21 @@ pipeline {
     post {
         always {
             echo 'Pipeline has completed.'
+            archiveArtifacts artifacts: '$BUILD_LOG', allowEmptyArchive: true
         }
         success {
             echo 'Pipeline completed successfully!'
-            // Send success email notification
             mail to: 'kamalaviloshini@gmail.com',
                  subject: "SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-                 body: "Good news! The build passed.\n\nCheck it out at ${env.BUILD_URL}"
+                 body: "Good news! The build passed.\n\nCheck it out at ${env.BUILD_URL}",
+                 attachmentsPattern: '$BUILD_LOG'
         }
         failure {
             echo 'Pipeline failed!'
-            // Send failure email notification
             mail to: 'kamalaviloshini@gmail.com',
                  subject: "FAILURE: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-                 body: "Something went wrong!\n\nCheck it out at ${env.BUILD_URL}"
+                 body: "Something went wrong!\n\nCheck it out at ${env.BUILD_URL}",
+                 attachmentsPattern: '$BUILD_LOG'
         }
     }
 }
