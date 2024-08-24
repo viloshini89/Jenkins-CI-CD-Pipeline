@@ -4,51 +4,37 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo 'Building the code using Maven...'
-                // Placeholder for build tool, e.g., Maven or Gradle
-                // Example: sh 'mvn clean install'
+                echo 'Stage 1: Building the code using Maven 3.9.9...'
             }
         }
         stage('Unit and Integration Tests') {
             steps {
-                echo 'Running unit tests using JUnit and integration tests using Selenium...'
-                // Placeholder for test automation tools, e.g., JUnit, Selenium
-                // Example: sh 'mvn test'
+                echo 'Stage 2: Running unit tests using JUnit and integration tests using Selenium...'
             }
         }
         stage('Code Analysis') {
             steps {
-                echo 'Analyzing code quality using SonarQube...'
-                // Placeholder for code analysis tool, e.g., SonarQube
-                // Example: sh 'sonar-scanner'
+                echo 'Stage 3: Analyzing code quality using SonarQube version X.Y.Z...'
             }
         }
         stage('Security Scan') {
             steps {
-                echo 'Running security scan using OWASP ZAP...'
-                // Placeholder for security scan tool, e.g., OWASP ZAP
-                // Example: sh 'zap-cli quick-scan http://your-app-url'
+                echo 'Stage 4: Running security scan using OWASP ZAP version A.B.C...'
             }
         }
         stage('Deploy to Staging') {
             steps {
-                echo 'Deploying application to AWS EC2 staging environment...'
-                // Placeholder for deployment commands
-                // Example: sh 'aws deploy create-deployment ...'
+                echo 'Stage 5: Deploying application to AWS EC2 staging environment...'
             }
         }
         stage('Integration Tests on Staging') {
             steps {
-                echo 'Running integration tests on the staging server...'
-                // Placeholder for integration testing on staging
-                // Example: sh 'run-integration-tests'
+                echo 'Stage 6: Running integration tests on the staging server...'
             }
         }
         stage('Deploy to Production') {
             steps {
-                echo 'Deploying application to AWS EC2 production environment...'
-                // Placeholder for deployment to production
-                // Example: sh 'aws deploy create-deployment ...'
+                echo 'Stage 7: Deploying application to AWS EC2 production environment...'
             }
         }
     }
@@ -59,17 +45,30 @@ pipeline {
         }
         success {
             echo 'Pipeline completed successfully!'
-            // Send success email notification
             mail to: 'kamalaviloshini@gmail.com',
                  subject: "SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-                 body: "Good news! The build passed.\n\nCheck it out at ${env.BUILD_URL}"
+                 body: """Good news! The build passed.
+
+Job: ${env.JOB_NAME} [${env.BUILD_NUMBER}]
+View the build details here: ${env.BUILD_URL}
+
+All stages executed successfully. Great job!
+"""
         }
         failure {
             echo 'Pipeline failed!'
-            // Send failure email notification
             mail to: 'kamalaviloshini@gmail.com',
                  subject: "FAILURE: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-                 body: "Something went wrong!\n\nCheck it out at ${env.BUILD_URL}"
+                 body: """Something went wrong with the build!
+
+Job: ${env.JOB_NAME} [${env.BUILD_NUMBER}]
+View the build details here: ${env.BUILD_URL}
+
+Summary of changes:
+${env.CHANGE_AUTHOR} committed changes to ${env.BRANCH_NAME}
+
+Please review the logs attached for more details.
+"""
         }
     }
 }
