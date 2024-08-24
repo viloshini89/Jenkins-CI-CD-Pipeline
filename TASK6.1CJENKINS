@@ -1,0 +1,75 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Build') {
+            steps {
+                echo 'Building the code using Maven...'
+                // Placeholder for build tool, e.g., Maven or Gradle
+                // Example: sh 'mvn clean install'
+            }
+        }
+        stage('Unit and Integration Tests') {
+            steps {
+                echo 'Running unit tests using JUnit and integration tests using Selenium...'
+                // Placeholder for test automation tools, e.g., JUnit, Selenium
+                // Example: sh 'mvn test'
+            }
+        }
+        stage('Code Analysis') {
+            steps {
+                echo 'Analyzing code quality using SonarQube...'
+                // Placeholder for code analysis tool, e.g., SonarQube
+                // Example: sh 'sonar-scanner'
+            }
+        }
+        stage('Security Scan') {
+            steps {
+                echo 'Running security scan using OWASP ZAP...'
+                // Placeholder for security scan tool, e.g., OWASP ZAP
+                // Example: sh 'zap-cli quick-scan http://your-app-url'
+            }
+        }
+        stage('Deploy to Staging') {
+            steps {
+                echo 'Deploying application to AWS EC2 staging environment...'
+                // Placeholder for deployment commands
+                // Example: sh 'aws deploy create-deployment ...'
+            }
+        }
+        stage('Integration Tests on Staging') {
+            steps {
+                echo 'Running integration tests on the staging server...'
+                // Placeholder for integration testing on staging
+                // Example: sh 'run-integration-tests'
+            }
+        }
+        stage('Deploy to Production') {
+            steps {
+                echo 'Deploying application to AWS EC2 production environment...'
+                // Placeholder for deployment to production
+                // Example: sh 'aws deploy create-deployment ...'
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Pipeline has completed.'
+        }
+        success {
+            echo 'Pipeline completed successfully!'
+            // Send success email notification
+            mail to: 'kamalaviloshini@gmail.com',
+                 subject: "SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+                 body: "Good news! The build passed.\n\nCheck it out at ${env.BUILD_URL}"
+        }
+        failure {
+            echo 'Pipeline failed!'
+            // Send failure email notification
+            mail to: 'kamalaviloshini@gmail.com',
+                 subject: "FAILURE: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+                 body: "Something went wrong!\n\nCheck it out at ${env.BUILD_URL}"
+        }
+    }
+}
