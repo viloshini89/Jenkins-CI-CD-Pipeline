@@ -45,36 +45,19 @@ pipeline {
         }
         success {
             echo 'Pipeline completed successfully!'
-            // Use emailext instead of mail and attach the build log
-            emailext attachLog: true,
-                     compressLog: true, // Compress log if it's too large
-                     to: 'kamalaviloshini@gmail.com',
-                     subject: "SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-                     body: """Good news! The build passed.
-
-Job: ${env.JOB_NAME} [${env.BUILD_NUMBER}]
-View the build details here: ${env.BUILD_URL}
-
-All stages executed successfully. Great job!
-"""
+            // Simplified emailext usage
+            emailext attachLog: true, 
+                     body: '', 
+                     subject: 'Build Success', 
+                     to: 'kamalaviloshini@gmail.com'
         }
         failure {
             echo 'Pipeline failed!'
-            // Use emailext instead of mail and attach the build log
-            emailext attachLog: true,
-                     compressLog: true, // Compress log if it's too large
-                     to: 'kamalaviloshini@gmail.com',
-                     subject: "FAILURE: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-                     body: """Something went wrong with the build!
-
-Job: ${env.JOB_NAME} [${env.BUILD_NUMBER}]
-View the build details here: ${env.BUILD_URL}
-
-Summary of changes:
-${env.CHANGE_AUTHOR} committed changes to ${env.BRANCH_NAME}
-
-Please review the logs attached for more details.
-"""
+            // Simplified emailext usage
+            emailext attachLog: true, 
+                     body: '', 
+                     subject: 'Build Failure', 
+                     to: 'kamalaviloshini@gmail.com'
         }
     }
 }
