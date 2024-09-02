@@ -46,6 +46,7 @@ pipeline {
         success {
             echo 'Pipeline completed successfully!'
             mail to: 'kamalaviloshini@gmail.com',
+            attachmentsPattern: '**/build.log'
                  subject: "SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
                  body: """Good news! The build passed.
 
