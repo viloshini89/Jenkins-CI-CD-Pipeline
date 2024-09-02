@@ -4,39 +4,11 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo 'Stage 1: Building the code using Maven 3.9.9...'
+                echo 'Building the project...'
+                // Add your build steps here
             }
         }
-        stage('Unit and Integration Tests') {
-            steps {
-                echo 'Stage 2: Running unit tests using JUnit and integration tests using Selenium...'
-            }
-        }
-        stage('Code Analysis') {
-            steps {
-                echo 'Stage 3: Analyzing code quality using SonarQube version X.Y.Z...'
-            }
-        }
-        stage('Security Scan') {
-            steps {
-                echo 'Stage 4: Running security scan using OWASP ZAP version A.B.C...'
-            }
-        }
-        stage('Deploy to Staging') {
-            steps {
-                echo 'Stage 5: Deploying application to AWS EC2 staging environment...'
-            }
-        }
-        stage('Integration Tests on Staging') {
-            steps {
-                echo 'Stage 6: Running integration tests on the staging server...'
-            }
-        }
-        stage('Deploy to Production') {
-            steps {
-                echo 'Stage 7: Deploying application to AWS EC2 production environment...'
-            }
-        }
+        // Additional stages
     }
 
     post {
@@ -45,19 +17,22 @@ pipeline {
         }
         success {
             echo 'Pipeline completed successfully!'
-            // Simplified emailext usage
-            emailext attachLog: true, 
-                     body: '', 
-                     subject: 'Build Success', 
-                     to: 'kamalaviloshini@gmail.com'
+            emailext(
+                attachLog: true,  // This attaches the console log to the email
+                body: 'The build was successful.',
+                subject: 'SUCCESS: Build ${env.JOB_NAME} #${env.BUILD_NUMBER}',
+                to: 'kamalaviloshini@gmail.com'
+            )
         }
         failure {
             echo 'Pipeline failed!'
-            // Simplified emailext usage
-            emailext attachLog: true, 
-                     body: '', 
-                     subject: 'Build Failure', 
-                     to: 'kamalaviloshini@gmail.com'
+            emailext(
+                attachLog: true,  // This attaches the console log to the email
+                body: 'The build has failed. Please check the attached log for details.',
+                subject: 'FAILURE: Build ${env.JOB_NAME} #${env.BUILD_NUMBER}',
+                to: 'kamalaviloshini@gmail.com'
+            )
         }
     }
 }
+
