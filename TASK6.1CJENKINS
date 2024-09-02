@@ -44,24 +44,24 @@ pipeline {
             echo 'Pipeline has completed.'
         }
         success {
-        echo 'Pipeline completed successfully!'
-        emailext attachLog: true,
-                 to: 'kamalaviloshini@gmail.com',
-                 subject: "SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-                 body: """Good news! The build passed.
+            echo 'Pipeline completed successfully!'
+            emailext attachLog: true,
+                     to: 'kamalaviloshini@gmail.com',
+                     subject: "SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+                     body: """Good news! The build passed.
 
 Job: ${env.JOB_NAME} [${env.BUILD_NUMBER}]
 View the build details here: ${env.BUILD_URL}
 
 All stages executed successfully. Great job!
 """
-    }
-    failure {
-        echo 'Pipeline failed!'
-        emailext attachLog: true,
-                 to: 'kamalaviloshini@gmail.com',
-                 subject: "FAILURE: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-                 body: """Something went wrong with the build!
+        }
+        failure {
+            echo 'Pipeline failed!'
+            emailext attachLog: true,
+                     to: 'kamalaviloshini@gmail.com',
+                     subject: "FAILURE: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+                     body: """Something went wrong with the build!
 
 Job: ${env.JOB_NAME} [${env.BUILD_NUMBER}]
 View the build details here: ${env.BUILD_URL}
@@ -71,5 +71,6 @@ ${env.CHANGE_AUTHOR} committed changes to ${env.BRANCH_NAME}
 
 Please review the logs attached for more details.
 """
+        }
     }
 }
