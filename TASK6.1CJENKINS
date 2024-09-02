@@ -45,21 +45,26 @@ pipeline {
         }
         success {
             echo 'Pipeline completed successfully!'
-            mail to: 'kamalaviloshini@gmail.com',
-                 subject: "SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-                 body: """Good news! The build passed.
+            emailext(
+                attachLog: true,  // This attaches the console log to the email
+                to: 'kamalaviloshini@gmail.com',
+                subject: "SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+                body: """Good news! The build passed.
 
 Job: ${env.JOB_NAME} [${env.BUILD_NUMBER}]
 View the build details here: ${env.BUILD_URL}
 
 All stages executed successfully. Great job!
 """
+            )
         }
         failure {
             echo 'Pipeline failed!'
-            mail to: 'kamalaviloshini@gmail.com',
-                 subject: "FAILURE: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-                 body: """Something went wrong with the build!
+            emailext(
+                attachLog: true,  // This attaches the console log to the email
+                to: 'kamalaviloshini@gmail.com',
+                subject: "FAILURE: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+                body: """Something went wrong with the build!
 
 Job: ${env.JOB_NAME} [${env.BUILD_NUMBER}]
 View the build details here: ${env.BUILD_URL}
@@ -69,8 +74,7 @@ ${env.CHANGE_AUTHOR} committed changes to ${env.BRANCH_NAME}
 
 Please review the logs attached for more details.
 """
+            )
         }
     }
 }
-
-
